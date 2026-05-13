@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IP Terms in University–Industry Collaborations</title>
+  <style>
+    :root {
+      --navy:       #162d4e;
+      --navy-mid:   #1e3f6d;
+      --navy-light: #2a5298;
+      --gold:       #c5932a;
+      --gold-light: #f5e6c8;
+      --bg:         #f2f4f7;
+      --card:       #ffffff;
+      --text:       #1a1a2e;
+      --text-muted: #5a6478;
+      --border:     #d8dde8;
+
+      --yes-bg:   #e6f4ed; --yes-text:   #1a6b3a; --yes-border: #a3d4b5;
+      --no-bg:    #fce9e9; --no-text:    #a01a1a; --no-border:  #f0aaa8;
+      --opt-bg:   #fff4e0; --opt-text:   #9b5800; --opt-border: #f0c870;
+      --cond-bg:  #edf3ff; --cond-text:  #3357a0; --cond-border:#a8c0ef;
+      --draft-bg: #f2f2f2; --draft-text: #6b6b6b; --draft-border:#c0c0c0;
+
+      --uni-accent:  #1e6fa5;
+      --joint-accent:#4a7d6b;
+      --co-accent:   #7a5a2e;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ─────────────────────────────────────────── */
+    .site-header {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
+      color: #fff;
+      padding: 28px 40px 24px;
+      border-bottom: 4px solid var(--gold);
+    }
+    .site-header h1 {
+      font-size: 1.45rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+    }
+    .site-header p {
+      margin-top: 6px;
+      font-size: 0.88rem;
+      opacity: 0.75;
+      max-width: 680px;
+      line-height: 1.5;
+    }
+    .draft-tag {
+      display: inline-block;
+      background: var(--gold);
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 3px;
+      margin-left: 10px;
+      vertical-align: middle;
+    }
+
+    /* ── SCENARIO SELECTOR ──────────────────────────────── */
+    .selector-wrap {
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      padding: 24px 40px 0;
+    }
+    .selector-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+    .scenario-tabs {
+      display: flex;
+      gap: 0;
+      position: relative;
+    }
+    .scenario-tab {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 14px 8px 16px;
+      cursor: pointer;
+      border: none;
+      background: none;
+      color: var(--text-muted);
+      border-bottom: 3px solid transparent;
+      transition: all 0.2s ease;
+      font-family: inherit;
+      position: relative;
+    }
+    .scenario-tab:hover { background: var(--bg); color: var(--navy); }
+    .scenario-tab.active {
+      color: var(--navy);
+      border-bottom-color: var(--gold);
+      background: #fafbfc;
+    }
+    .tab-letter {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; font-weight: 700;
+      background: var(--bg);
+      border: 2px solid var(--border);
+      transition: all 0.2s;
+    }
+    .scenario-tab.active .tab-letter {
+      background: var(--navy);
+      border-color: var(--navy);
+      color: #fff;
+    }
+    .tab-pct {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--gold);
+    }
+    .tab-name {
+      font-size: 0.72rem;
+      text-align: center;
+      max-width: 90px;
+      line-height: 1.3;
+    }
+
+    /* Connector line between tabs */
+    .scenario-tabs::before {
+      content: '';
+      position: absolute;
+      top: 32px;
+      left: calc(10% + 19px);
+      right: calc(10% + 19px);
+      height: 2px;
+      background: var(--border);
+      z-index: 0;
+    }
+    .tab-letter { z-index: 1; }
+
+    /* ── MAIN CONTENT ───────────────────────────────────── */
+    .main {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 32px 40px 48px;
+    }
+
+    .scenario-summary {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-left: 5px solid var(--gold);
+      border-radius: 6px;
+      padding: 16px 20px;
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .summary-scenario { font-size: 2rem; font-weight: 700; color: var(--navy); line-height: 1; }
+    .summary-divider { width: 1px; height: 40px; background: var(--border); }
+    .summary-text {}
+    .summary-title { font-weight: 600; font-size: 1rem; color: var(--navy); }
+    .summary-sub { font-size: 0.85rem; color: var(--text-muted); margin-top: 2px; }
+
+    /* ── IP GRID ────────────────────────────────────────── */
+    .ip-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .ip-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0,0,0,.06);
+    }
+
+    .card-header {
+      padding: 14px 18px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card-header-icon { font-size: 1rem; }
+    .ip-card.uni   .card-header { background: var(--uni-accent); }
+    .ip-card.joint .card-header { background: var(--joint-accent); }
+    .ip-card.co    .card-header { background: var(--co-accent); }
+
+    .ownership-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 18px;
+      background: #f8f9fc;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.84rem;
+    }
+    .ownership-label { color: var(--text-muted); font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; min-width: 72px; }
+    .ownership-value { font-weight: 600; color: var(--navy); }
+
+    .rights-perspective {
+      padding: 8px 18px 4px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      background: #fcfcfd;
+      border-bottom: 1px solid var(--border);
+      margin-top: 0;
+    }
+
+    .rights-row {
+      padding: 14px 18px;
+      border-bottom: 1px solid #eef0f5;
+    }
+    .rights-row:last-child { border-bottom: none; }
+
+    .rights-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      cursor: pointer;
+    }
+    .rights-category {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border: 1px solid;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .badge.yes   { background: var(--yes-bg);   color: var(--yes-text);   border-color: var(--yes-border);  }
+    .badge.no    { background: var(--no-bg);    color: var(--no-text);    border-color: var(--no-border);   }
+    .badge.option { background: var(--opt-bg); color: var(--opt-text);  border-color: var(--opt-border);  }
+    .badge.conditional { background: var(--cond-bg); color: var(--cond-text); border-color: var(--cond-border); }
+    .badge.draft { background: var(--draft-bg); color: var(--draft-text); border-color: var(--draft-border); }
+
+    .rights-summary {
+      margin-top: 6px;
+      font-size: 0.82rem;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .rights-detail {
+      display: none;
+      margin-top: 10px;
+      padding: 10px 12px;
+      background: #f8f9fc;
+      border-left: 3px solid var(--border);
+      border-radius: 0 4px 4px 0;
+      font-size: 0.81rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      white-space: pre-line;
+    }
+    .rights-detail.open { display: block; }
+
+    .expand-btn {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-size: 0.7rem;
+      padding: 2px 6px;
+      flex-shrink: 0;
+      transition: all 0.15s;
+    }
+    .expand-btn:hover { background: var(--bg); color: var(--navy); }
+
+    /* ── NOTES SECTION ──────────────────────────────────── */
+    .notes-section {
+      margin-top: 36px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .notes-header {
+      background: var(--navy);
+      color: #fff;
+      padding: 14px 20px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .notes-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+    }
+    .note-item {
+      padding: 18px 20px;
+      border-right: 1px solid var(--border);
+    }
+    .note-item:last-child { border-right: none; }
+    .note-title {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--navy);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 6px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .note-body {
+      font-size: 0.82rem;
+      line-height: 1.6;
+      color: var(--text-muted);
+    }
+
+    /* ── LEGEND ─────────────────────────────────────────── */
+    .legend {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+      padding: 12px 16px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      align-items: center;
+    }
+    .legend-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-muted); margin-right: 4px; }
+
+    /* ── FOOTER ─────────────────────────────────────────── */
+    .site-footer {
+      text-align: center;
+      padding: 16px 40px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+      background: var(--card);
+    }
+
+    /* ── RESPONSIVE ─────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .ip-grid { grid-template-columns: 1fr; }
+      .notes-grid { grid-template-columns: 1fr; }
+      .note-item { border-right: none; border-bottom: 1px solid var(--border); }
+      .main { padding: 20px; }
+      .site-header { padding: 20px; }
+      .selector-wrap { padding: 16px 20px 0; }
+      .tab-name { display: none; }
+    }
+    @media (max-width: 600px) {
+      .scenario-tabs::before { display: none; }
+      .scenario-summary { flex-direction: column; align-items: flex-start; gap: 8px; }
+      .summary-divider { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <h1>IP Terms in University–Industry Collaborations <span class="draft-tag">Draft v0.3</span></h1>
+  <p>Key IP provisions based on industry funding level. Select a scenario to view ownership and rights for each category of arising IP. Click any rights row for full detail.</p>
+</header>
+
+<!-- SCENARIO SELECTOR -->
+<div class="selector-wrap">
+  <div class="selector-label">Select funding scenario</div>
+  <div class="scenario-tabs" role="tablist">
+    <button class="scenario-tab active" data-scenario="A" role="tab" aria-selected="true">
+      <div class="tab-letter">A</div>
+      <div class="tab-pct">0%</div>
+      <div class="tab-name">No funding</div>
+    </button>
+    <button class="scenario-tab" data-scenario="B" role="tab" aria-selected="false">
+      <div class="tab-letter">B</div>
+      <div class="tab-pct">&lt;100%</div>
+      <div class="tab-name">Part funding</div>
+    </button>
+    <button class="scenario-tab" data-scenario="C" role="tab" aria-selected="false">
+      <div class="tab-letter">C</div>
+      <div class="tab-pct">100%</div>
+      <div class="tab-name">Full cost (fEC)</div>
+    </button>
+    <button class="scenario-tab" data-scenario="D" role="tab" aria-selected="false">
+      <div class="tab-letter">D</div>
+      <div class="tab-pct">~120%</div>
+      <div class="tab-name">Above fEC (fEC+)</div>
+    </button>
+    <button class="scenario-tab" data-scenario="E" role="tab" aria-selected="false">
+      <div class="tab-letter">E</div>
+      <div class="tab-pct">~150%</div>
+      <div class="tab-name">Contract rates (fEC++)</div>
+    </button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- SCENARIO SUMMARY -->
+  <div class="scenario-summary" id="scenarioSummary">
+    <div class="summary-scenario" id="sumLetter">A</div>
+    <div class="summary-divider"></div>
+    <div class="summary-text">
+      <div class="summary-title" id="sumTitle">No Industry Funding</div>
+      <div class="summary-sub" id="sumSub">Industry partner is not providing any funding to the project (0% of fEC).</div>
+    </div>
+  </div>
+
+  <!-- LEGEND -->
+  <div class="legend">
+    <span class="legend-label">Status key:</span>
+    <span class="badge yes">✓ Rights granted</span>
+    <span class="badge no">✗ No rights</span>
+    <span class="badge option">⏱ Option to negotiate</span>
+    <span class="badge conditional">↔ Conditional / options</span>
+    <span class="badge draft">? To be confirmed</span>
+    <span style="font-size:0.75rem;color:var(--text-muted);margin-left:auto;">Click any row for full detail</span>
+  </div>
+
+  <!-- IP CARDS -->
+  <div class="ip-grid" id="ipGrid">
+    <!-- Rendered by JS -->
+  </div>
+
+  <!-- NOTES -->
+  <div class="notes-section">
+    <div class="notes-header">⚑ &nbsp;Key Principles — All Scenarios</div>
+    <div class="notes-grid">
+      <div class="note-item">
+        <div class="note-title">💡 Embedded Licences</div>
+        <div class="note-body">Where a company insists on rights to use for commercial purposes, this should be addressed as an <strong>embedded licence</strong> and not granted for free. Fully funded deals may justify an embedded licence or stronger option position than part-funded deals, where it should be considered exceptional.</div>
+      </div>
+      <div class="note-item">
+        <div class="note-title">🤝 Joint IP</div>
+        <div class="note-body">Joint ownership terms must be <strong>explicitly defined</strong> in the agreement rather than relying on default legal rules. Patenting of Joint IP to be agreed between both parties. If the company holds priority rights (option or commercial licence), it should cover patent costs.</div>
+      </div>
+      <div class="note-item">
+        <div class="note-title">📋 Patenting</div>
+        <div class="note-body">Patenting of <strong>University IP</strong> to be led by the University in consultation with the Company. Patenting of <strong>Joint IP</strong> to be agreed between the parties. If the company holds any priority rights (e.g. option or commercial licence), it should cover patent costs.</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  DRAFT v0.3 — For internal use only. Not legal advice. Contact the Research Contracts team for guidance on specific projects.
+</footer>
+
+<script>
+  // ── DATA ───────────────────────────────────────────────────────────────────
+  const SCENARIOS = {
+    A: {
+      title: 'No Industry Funding',
+      sub: 'Industry partner is not providing any funding to the project (0% of fEC).',
+      universityIP: {
+        ownership: 'University owned',
+        perspective: "Industry partner's rights over University IP",
+        rights: [
+          {
+            category: 'Internal R&D',
+            badge: 'no', badgeLabel: 'No rights',
+            summary: 'Industry partner is not granted rights to use University IP for internal R&D.',
+            detail: 'Industry partner has no entitlement to use University Arising IP for internal research and development purposes at this funding level.'
+          },
+          {
+            category: 'Commercial use',
+            badge: 'option', badgeLabel: 'Option to negotiate',
+            summary: 'Industry partner may negotiate a non-exclusive or exclusive licence covering internal R&D and commercial use.',
+            detail: 'Industry partner is granted a time-limited option to negotiate a non-exclusive or exclusive licence covering both internal R&D use and commercial use of University Arising IP.'
+          }
+        ]
+      },
+      jointIP: {
+        ownership: 'Jointly owned',
+        perspective: "Industry partner's rights over Joint IP",
+        rights: [
+          {
+            category: 'Internal R&D',
+            badge: 'no', badgeLabel: 'No rights',
+            summary: 'Industry partner is not granted rights to use Joint IP for internal R&D.',
+            detail: 'No rights are directly granted. Industry partner is granted a time-limited option to negotiate a non-exclusive or exclusive licence for internal R&D use of Joint IP.'
+          },
+          {
+            category: 'Commercial use',
+            badge: 'no', badgeLabel: 'No rights',
+            summary: 'Industry partner is not granted commercial rights to Joint IP.',
+            detail: 'No commercial rights are directly granted. Industry partner is granted a time-limited option to negotiate a non-exclusive or exclusive licence for commercial use of Joint IP.'
+          }
+        ]
+      },
+      companyIP: {
+        ownership: 'Company owned',
+        perspective: "University's rights over Company IP",
+        rights: [
+          {
+            category: 'Internal R&D',
+            badge: 'draft', badgeLabel: 'To be confirmed',
+            summary: 'University rights for internal R&D use not specified in this scenario.',
+            detail: 'This position is not specified in the current draft. To be confirmed via Research Contracts team.'
+          },
+          {
+            category: 'Commercial use',
+            badge: 'no', badgeLabel: 'No rights',
+            summary: 'University has no commercial rights over Company Arising IP.',
+            detail: 'The University does not hold any commercial exploitation rights over IP that is owned by the Company.'
+          }
+        ]
+      }
+    },
+
+    B: {
+      title: 'Part Funding',
+      sub: 'Industry partner provides part funding only (less than 100% of fEC).',
+      universityIP: {
+        ownership: 'University owned',
+        perspective: "Industry partner's rights over University IP",
+        rights: [
+          {
+            category: 'Internal R&D',
+            badge: 'conditional', badgeLabel: 'Under discussion',
+            summary: 'May be granted a [time-limited] non-exclusive licence for internal R&D — position to be confirmed.',
+            detail: 'Currently under discussion: Industry partner may be granted a [time-limited] non-exclusive licence for internal R&D purposes. This position is still being resolved in this draft.'
+          },
+          {
+            category: 'Commercial use',
+            badge: 'option', badgeLabel: 'Option to negotiate',
+            summary: 'Industry partner granted a time-limited option to negotiate an exclusive commercial licence.',
+            detail: 'Industry partner is not granted automatic commercial rights, but is granted a time-limited option to negotiate an exclusive commercial licence to University Arising IP.'
+          }
+        ]
+      },
+      jointIP: {
+        ownership: 'Jointly owned',
+        perspective: "Industry partner's rights over Joint IP",
+        rights: [
+          {
+            category: 'Internal R&D',
+            badge: 'yes', badgeLabel: 'Rights granted',
+            summary: 'Both parties may use Joint IP for internal R&D purposes.',
+            detail: 'Yes — both parties (University and Industry Partner) are entitled to use Joint Arising IP for internal research and development purposes.'
+          },
+          {
+            category: 'Commercial use',
+            badge: 'conditional', badgeLabel: 'Conditional options',
+            summary: 'Two options available; industry partner also granted a time-limited option for an exclusive commercial licence to University rights in Joint IP.',
+            detail: 'Option A: Either party may use Joint IP for commercial purposes (including sublicensing), subject to agreeing fair and reasonable compensation to the other party.\n\nOption B: Neither party may use for commercial purposes without first obtaining a licence from the other party, on fair and reasonable terms.\n\nAdditionally: Industry partner is granted a time-limited option to negotiate an exclusive commercial licence to the University\'s rights in Joint IP.'
+          }
+        ]
+      },
+      companyIP: {
+        ownership: 'Company owned',
+        perspective: "University's rights over Company IP",
+        rights: [
+          {
+            category: 'Internal R&D',
+            badge: 'draft', badgeLabel: 'To be confirmed',
+            summary: 'University rights for internal R&D use not specified in this scenario.',
+            detail: 'This position is not specified in the current draft. To be confirmed via Research Contracts team.'
+          },
+          {
+            category: 'Commercial use',
+            badge: 'no', badgeLabel: 'No rights',
+            summary: 'University has no commercial rights over Company Arising IP.',
+            detail: 'The University does not hold any commercial exploitation rights over IP that is owned by the Company.'
+          }
+        ]
+      }
+    },
+
+    C: {
+      title: 'Full Cost Funding (fEC)',
+      sub: 'Industry partner fully funds the project at full economic cost — 100% of fEC.',
+      universityIP: {
+        ownership: 'University owned',
+        perspective: "Industry partner's rights over University IP",
+        rights: [
+          {
+            category: 'Internal R&D',
+            badge: 'yes', badgeLabel: 'Rights granted',
+            summary: 'Industry partner granted a non-exclusive licence for internal R&D use only.',
+            detail: 'Industry partner is granted a non-exclusive licence to use University Arising IP for internal research and development purposes only. This does not extend to commercial exploitation.'
+          },
+          {
+            category: 'Commercial use',
+            badge: 'option', badgeLabel: 'Option to negotiate',
+            summary: 'Industry partner granted a time-limited option to negotiate an exclusive commercial licence. Not automatically granted.',
+            detail: 'Industry partner is not automatically granted commercial rights, but is granted a time-limited option to negotiate an exclusive commercial licence to University Arising IP. An embedded licence would need to be separately agreed and is not free of charge.'
+          }
+        ]
+      },
+      jointIP: {
+        ownership: 'Jointly owned',
+        perspective: "Industry partner's rights over Joint IP",
+        rights: [
+          {
+            category: 'Internal R&D',
+            badge: 'yes', badgeLabel: 'Rights granted',
+            summary: 'Industry partner may use Joint IP for internal R&D purposes only.',
+            detail: 'Yes — industry partner may use Joint Arising IP for internal research and development purposes only.'
+          },
+          {
+            category: 'Commercial use',
+            badge: 'conditional', badgeLabel: 'Conditional options',
+            summary: 'Two options available; industry partner also holds a time-limited option to negotiate exclusive commercial licence to University rights in Joint IP.',
+            detail: 'Option A: Either party may use Joint IP for commercial purposes (including sublicensing), subject to agreeing fair and reasonable compensation to the other party.\n\nOption B: Neither party may use for commercial purposes without first obtaining a licence from the other party, on fair and reasonable terms.\n\nAdditionally: Industry partner is granted a time-limited option to negotiate an exclusive commercial licence to the University\'s rights in Joint IP.'
+          }
+        ]
+      },
+      companyIP: {
+        ownership: 'Company owned',
+        perspective: "University's rights over Company IP",
+        rights: [
+          {
+            category: 'Internal R&D',
+            badge: 'draft', badgeLabel: 'To be confirmed',
+            summary: 'University rights for internal R&D use not specified in this scenario.',
+            detail: 'This position is not specified in the current draft. To be confirmed via Research Contracts team.'
+          },
+          {
+            category: 'Commercial use',
+            badge: 'no', badgeLabel: 'No rights',
+            summary: 'University has no commercial rights over Company Arising IP.',
+            detail: 'The University does not hold any commercial exploitation rights over IP that is owned by the Company.'
+          }
+        ]
+      }
+    },
+
+    D: {
+      title: 'Above Full Cost (fEC+)',
+      sub: 'Industry partner funds the project above full economic cost — approximately 120% of fEC.',
+      universityIP: {
+        ownership: 'University owned',
+        perspective: "Industry partner's rights over University IP",
+        rights: [
+          {
+            category: 'Internal R&D',
+            badge: 'yes', badgeLabel: 'Rights granted',
+            summary: 'Industry partner granted a non-exclusive licence for internal R&D use.',
+            detail: 'Industry partner is granted a non-exclusive licence to use University Arising IP for internal research and development purposes.'
+          },
+          {
+            category: 'Commercial use',
+            badge: 'yes', badgeLabel: 'Rights granted',
+            summary: 'Industry partner granted a non-exclusive commercial licence, plus a time-limited option to negotiate an exclusive commercial licence.',
+            detail: 'Industry partner is granted a non-exclusive commercial licence to University Arising IP. Additionally, the industry partner is granted a time-limited option to negotiate an exclusive commercial-use licence to the University\'s rights in Joint IP.'
+          }
+        ]
+      },
+      jointIP: {
+        ownership: 'Jointly owned',
+        perspective: "Industry partner's rights over Joint IP",
+        rights: [
+          {
+            category: 'Internal R&D',
+            badge: 'yes', badgeLabel: 'Rights granted',
+            summary: 'Industry partner may use Joint IP for internal R&D purposes only.',
+            detail: 'Yes — industry partner may use Joint Arising IP for internal research and development purposes only.'
+          },
+          {
+            category: 'Commercial use',
+            badge: 'yes', badgeLabel: 'Rights granted',
+            summary: 'Both parties may use Joint IP for commercial purposes, including sublicensing.',
+            detail: 'Yes — both parties (University and Industry Partner) may use Joint Arising IP for commercial purposes, including sublicensing to third parties.'
+          }
+        ]
+      },
+      companyIP: {
+        ownership: 'Company owned',
+        perspective: "University's rights over Company IP",
+        rights: [
+          {
+            category: 'Internal R&D',
+            badge: 'draft', badgeLabel: 'To be confirmed',
+            summary: 'University rights for internal R&D use not specified in this scenario.',
+            detail: 'This position is not specified in the current draft. To be confirmed via Research Contracts team.'
+          },
+          {
+            category: 'Commercial use',
+            badge: 'no', badgeLabel: 'No rights',
+            summary: 'University has no commercial rights over Company Arising IP.',
+            detail: 'The University does not hold any commercial exploitation rights over IP that is owned by the Company.'
+          }
+        ]
+      }
+    },
+
+    E: {
+      title: 'Contract Research Rates (fEC++)',
+      sub: 'Industry partner funds the project at full contract research rates — approximately 150% of fEC.',
+      universityIP: {
+        ownership: 'University owned',
+        perspective: "Industry partner's rights over University IP",
+        rights: [
+          {
+            category: 'Internal R&D',
+            badge: 'yes', badgeLabel: 'Exclusive licence / assignment',
+            summary: 'Industry partner granted an exclusive licence, or University assigns IP ownership — both subject to retained academic rights.',
+            detail: 'Industry partner is granted an exclusive licence to University Arising IP (or, alternatively, the University assigns IP ownership to the Industry Partner). Either arrangement is subject to the University retaining rights for academic research and teaching purposes only.'
+          },
+          {
+            category: 'Commercial use',
+            badge: 'yes', badgeLabel: 'Exclusive licence / assignment',
+            summary: 'Industry partner granted an exclusive commercial licence, or University assigns IP ownership — both subject to retained academic rights.',
+            detail: 'Industry partner is granted an exclusive commercial use licence to University Arising IP (or, alternatively, the University assigns IP ownership). Either arrangement is subject to the University retaining rights for academic research and teaching purposes only.'
+          }
+        ]
+      },
+      jointIP: {
+        ownership: 'Jointly owned',
+        perspective: "Industry partner's rights over Joint IP",
+        rights: [
+          {
+            category: 'Internal R&D',
+            badge: 'yes', badgeLabel: 'Exclusive licence / assignment',
+            summary: 'Industry partner granted an exclusive licence, or University assigns IP ownership — subject to retained academic rights.',
+            detail: 'Industry partner is granted an exclusive licence to Joint Arising IP (or, alternatively, the University assigns its interest to the Industry Partner), subject to the University retaining rights for academic research and teaching only.'
+          },
+          {
+            category: 'Commercial use',
+            badge: 'yes', badgeLabel: 'Exclusive licence / assignment',
+            summary: 'Industry partner granted an exclusive commercial licence, or University assigns its interest — subject to retained academic rights.',
+            detail: 'Industry partner is granted an exclusive commercial use licence to Joint Arising IP (or, alternatively, the University assigns its interest). Subject to the University retaining rights for academic research and teaching only.'
+          }
+        ]
+      },
+      companyIP: {
+        ownership: 'Company owned',
+        perspective: "University's rights over Company IP",
+        rights: [
+          {
+            category: 'Internal R&D',
+            badge: 'draft', badgeLabel: 'To be confirmed',
+            summary: 'University rights for internal R&D use not specified in this scenario.',
+            detail: 'This position is not specified in the current draft. To be confirmed via Research Contracts team.'
+          },
+          {
+            category: 'Commercial use',
+            badge: 'no', badgeLabel: 'No rights',
+            summary: 'University has no commercial rights over Company Arising IP.',
+            detail: 'The University does not hold any commercial exploitation rights over IP that is owned by the Company.'
+          }
+        ]
+      }
+    }
+  };
+
+  // ── RENDER ─────────────────────────────────────────────────────────────────
+  function buildCard(data, cardClass, title, icon) {
+    const rightsHTML = data.rights.map((r, i) => `
+      <div class="rights-row">
+        <div class="rights-top" onclick="toggleDetail(this)">
+          <span class="rights-category">${r.category}</span>
+          <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+            <span class="badge ${r.badge}">${r.badge === 'yes' ? '✓' : r.badge === 'no' ? '✗' : r.badge === 'option' ? '⏱' : r.badge === 'conditional' ? '↔' : '?'} ${r.badgeLabel}</span>
+            <button class="expand-btn" tabindex="-1">▾</button>
+          </div>
+        </div>
+        <div class="rights-summary">${r.summary}</div>
+        <div class="rights-detail">${r.detail}</div>
+      </div>
+    `).join('');
+
+    return `
+      <div class="ip-card ${cardClass}">
+        <div class="card-header"><span class="card-header-icon">${icon}</span>${title}</div>
+        <div class="ownership-row">
+          <span class="ownership-label">Owned by</span>
+          <span class="ownership-value">${data.ownership}</span>
+        </div>
+        <div class="rights-perspective">${data.perspective}</div>
+        ${rightsHTML}
+      </div>
+    `;
+  }
+
+  function render(scenarioId) {
+    const s = SCENARIOS[scenarioId];
+
+    document.getElementById('sumLetter').textContent = scenarioId;
+    document.getElementById('sumTitle').textContent = `Scenario ${scenarioId}: ${s.title}`;
+    document.getElementById('sumSub').textContent = s.sub;
+
+    const grid = document.getElementById('ipGrid');
+    grid.innerHTML =
+      buildCard(s.universityIP, 'uni',   'University Arising IP', '🏛') +
+      buildCard(s.jointIP,      'joint', 'Joint Arising IP',      '🤝') +
+      buildCard(s.companyIP,    'co',    'Company Arising IP',    '🏢');
+  }
+
+  function toggleDetail(topEl) {
+    const row = topEl.closest('.rights-row');
+    const detail = row.querySelector('.rights-detail');
+    const btn = row.querySelector('.expand-btn');
+    const open = detail.classList.toggle('open');
+    btn.textContent = open ? '▴' : '▾';
+    btn.style.background = open ? 'var(--bg)' : '';
+  }
+
+  // ── TABS ───────────────────────────────────────────────────────────────────
+  document.querySelectorAll('.scenario-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.scenario-tab').forEach(t => {
+        t.classList.remove('active');
+        t.setAttribute('aria-selected', 'false');
+      });
+      tab.classList.add('active');
+      tab.setAttribute('aria-selected', 'true');
+      render(tab.dataset.scenario);
+    });
+  });
+
+  // Initial render
+  render('A');
+</script>
+</body>
+</html>
