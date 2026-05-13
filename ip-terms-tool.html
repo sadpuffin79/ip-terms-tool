@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">part 
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>IP Terms in University–Industry Collaborations</title>
   <style>
@@ -17,7 +17,6 @@
       --text-muted: #5a6478;
       --border:     #d8dde8;
 
-      /* Edinburgh Innovations column accent colours */
       --uni-accent:   #003865;
       --joint-accent: #7B0C2A;
       --co-accent:    #5a6478;
@@ -38,7 +37,6 @@
       min-height: 100vh;
     }
 
-    /* ── HEADER ─────────────────────────────────────────── */
     .site-header {
       background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
       color: #fff;
@@ -95,7 +93,6 @@
       vertical-align: middle;
     }
 
-    /* ── SCENARIO SELECTOR ──────────────────────────────── */
     .selector-wrap {
       background: var(--card);
       border-bottom: 1px solid var(--border);
@@ -195,7 +192,6 @@
       color: var(--navy);
     }
 
-    /* ── MAIN CONTENT ───────────────────────────────────── */
     .main {
       max-width: 1300px;
       margin: 0 auto;
@@ -239,7 +235,6 @@
       margin-top: 2px;
     }
 
-    /* ── LEGEND / KEY ───────────────────────────────────── */
     .legend {
       display: flex;
       gap: 10px;
@@ -291,7 +286,6 @@
       border-color: var(--draft-border);
     }
 
-    /* ── IP GRID ────────────────────────────────────────── */
     .ip-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -352,7 +346,6 @@
       color: var(--navy);
     }
 
-    /* ── PERSPECTIVE HEADER ROWS ─────────────────────────── */
     .rights-perspective {
       padding: 8px 18px 6px;
       font-size: 0.68rem;
@@ -375,7 +368,6 @@
       background: color-mix(in srgb, var(--co-accent) 60%, #000 40%);
     }
 
-    /* ── RIGHTS ROWS ────────────────────────────────────── */
     .rights-row {
       padding: 0;
       border-bottom: 1px solid #eef0f5;
@@ -402,6 +394,15 @@
       color: var(--navy);
       text-transform: uppercase;
       letter-spacing: 0.07em;
+    }
+
+    .rights-badges {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      flex-shrink: 0;
+      flex-wrap: wrap;
     }
 
     .badge {
@@ -457,7 +458,6 @@
       color: var(--navy);
     }
 
-    /* ── NOTES SECTION ──────────────────────────────────── */
     .notes-section {
       margin-top: 36px;
       background: var(--card);
@@ -510,7 +510,6 @@
       color: var(--text-muted);
     }
 
-    /* ── FOOTER ─────────────────────────────────────────── */
     .site-footer {
       text-align: center;
       padding: 16px 40px;
@@ -520,7 +519,6 @@
       background: var(--card);
     }
 
-    /* ── RESPONSIVE ─────────────────────────────────────── */
     @media (max-width: 900px) {
       .ip-grid { grid-template-columns: 1fr; }
       .notes-grid { grid-template-columns: 1fr; }
@@ -556,12 +554,19 @@
         width: 130px;
         max-width: 60vw;
       }
+
+      .rights-top {
+        align-items: flex-start;
+      }
+
+      .rights-badges {
+        gap: 6px;
+      }
     }
   </style>
 </head>
 <body>
 
-<!-- HEADER -->
 <header class="site-header">
   <div class="site-header-content">
     <div class="site-header-text">
@@ -573,7 +578,6 @@
   </div>
 </header>
 
-<!-- SCENARIO SELECTOR -->
 <div class="selector-wrap">
   <div class="selector-label">Select Industry Partner funding scenario</div>
   <div class="scenario-tabs" role="tablist">
@@ -605,10 +609,8 @@
   </div>
 </div>
 
-<!-- MAIN -->
 <main class="main">
 
-  <!-- SCENARIO SUMMARY -->
   <div class="scenario-summary" id="scenarioSummary">
     <div class="summary-scenario" id="sumLetter">A</div>
     <div class="summary-divider"></div>
@@ -618,7 +620,6 @@
     </div>
   </div>
 
-  <!-- LEGEND / KEY -->
   <div class="legend">
     <span class="legend-label">Key</span>
     <span class="badge yes">✓ Rights</span>
@@ -627,12 +628,10 @@
     <span style="font-size:0.75rem;color:var(--text-muted);margin-left:auto;">Click any row for full detail</span>
   </div>
 
-  <!-- IP CARDS -->
   <div class="ip-grid" id="ipGrid">
     <!-- Rendered by JS -->
   </div>
 
-  <!-- NOTES -->
   <div class="notes-section">
     <div class="notes-header">⚑ &nbsp;Key Principles — All Scenarios</div>
     <div class="notes-grid">
@@ -658,7 +657,6 @@
 </footer>
 
 <script>
-  // ── DATA ───────────────────────────────────────────────────────────────────
   const SCENARIOS = {
     A: {
       title: 'No Industry Funding',
@@ -669,9 +667,12 @@
         industryRights: [
           {
             category: 'Internal R&D',
-            badge: 'no', badgeLabel: 'No rights',
-            summary: 'Industry partner is not granted rights to use University IP for internal R&D.',
-            detail: 'Industry partner has no entitlement to use University Arising IP for internal research and development purposes at this funding level.'
+            badges: [
+              { badge: 'no', badgeLabel: 'No rights' },
+              { badge: 'option', badgeLabel: 'Option' }
+            ],
+            summary: 'Industry partner is not granted automatic rights to use University IP for internal R&D, but may have an option to negotiate.',
+            detail: 'Industry partner has no automatic entitlement to use University Arising IP for internal research and development purposes at this funding level. However, the Industry Partner may be granted a time-limited option to negotiate a non-exclusive or exclusive licence.'
           },
           {
             category: 'Commercial use',
@@ -691,8 +692,8 @@
           {
             category: 'Commercial use',
             badge: 'yes', badgeLabel: 'Rights',
-            summary: 'University retains full commercial rights to University Arising IP, subject to Industry Partner's option.',
-            detail: 'The University retains full rights to commercialise University Arising IP, including through licensing to third parties, subject to the Industry Partner's time-limited option.'
+            summary: "University retains full commercial rights to University Arising IP, subject to Industry Partner's option.",
+            detail: "The University retains full rights to commercialise University Arising IP, including through licensing to third parties, subject to the Industry Partner's time-limited option."
           }
         ]
       },
@@ -1181,9 +1182,41 @@
     }
   };
 
-  // ── RENDER ─────────────────────────────────────────────────────────────────
   function badgeIcon(b) {
-    return b === 'yes' ? '✓' : b === 'no' ? '✗' : b === 'option' ? '⏱' : b === 'conditional' ? '↔' : '?';
+    return b === 'yes'
+      ? '✓'
+      : b === 'no'
+        ? '✗'
+        : b === 'option'
+          ? '⏱'
+          : b === 'conditional'
+            ? '↔'
+            : b === 'draft'
+              ? '?'
+              : '?';
+  }
+
+  function getBadges(row) {
+    if (Array.isArray(row.badges)) {
+      return row.badges;
+    }
+
+    if (row.badge && row.badgeLabel) {
+      return [
+        {
+          badge: row.badge,
+          badgeLabel: row.badgeLabel
+        }
+      ];
+    }
+
+    return [];
+  }
+
+  function renderBadges(row) {
+    return getBadges(row).map(item => `
+      <span class="badge ${item.badge}">${badgeIcon(item.badge)} ${item.badgeLabel}</span>
+    `).join('');
   }
 
   function buildRightsRows(rights) {
@@ -1191,8 +1224,8 @@
       <div class="rights-row">
         <div class="rights-top" onclick="toggleDetail(this)">
           <span class="rights-category">${r.category}</span>
-          <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
-            <span class="badge ${r.badge}">${badgeIcon(r.badge)} ${r.badgeLabel}</span>
+          <div class="rights-badges">
+            ${renderBadges(r)}
             <button class="expand-btn" tabindex="-1">▾</button>
           </div>
         </div>
@@ -1243,7 +1276,6 @@
     btn.style.background = open ? 'var(--bg)' : '';
   }
 
-  // ── TABS ───────────────────────────────────────────────────────────────────
   document.querySelectorAll('.scenario-tab').forEach(tab => {
     tab.addEventListener('click', () => {
       document.querySelectorAll('.scenario-tab').forEach(t => {
@@ -1256,7 +1288,6 @@
     });
   });
 
-  // Initial render
   render('A');
 </script>
 
@@ -1283,7 +1314,6 @@
     const cards = [...document.querySelectorAll('#ipGrid .ip-card')];
     if (cards.length < 2) return;
 
-    // Reset previous height syncing
     const resetSelectors = [
       '.card-header',
       '.ownership-row',
@@ -1299,16 +1329,11 @@
       });
     });
 
-    // Do not sync heights on single-column/mobile layout
     if (window.matchMedia('(max-width: 900px)').matches) return;
 
-    // Align card headers
     setMinHeightToMax(cards.map(card => card.querySelector('.card-header')));
-
-    // Align ownership rows
     setMinHeightToMax(cards.map(card => card.querySelector('.ownership-row')));
 
-    // Align perspective sub-headings
     const perspectiveGroups = cards.map(card => [
       ...card.querySelectorAll('.rights-perspective')
     ]);
@@ -1321,7 +1346,6 @@
       setMinHeightToMax(perspectiveGroups.map(group => group[i]));
     }
 
-    // Align each rights row by index
     const rowGroups = cards.map(card => [
       ...card.querySelectorAll('.rights-row')
     ]);
@@ -1335,7 +1359,6 @@
     }
   }
 
-  // Wrap existing render function so heights are synced after every scenario change
   if (typeof window.render === 'function') {
     const originalRender = window.render;
 
@@ -1346,7 +1369,6 @@
     };
   }
 
-  // Wrap existing toggleDetail function so heights are synced after expanding/collapsing rows
   if (typeof window.toggleDetail === 'function') {
     const originalToggleDetail = window.toggleDetail;
 
@@ -1357,12 +1379,10 @@
     };
   }
 
-  // Re-sync when the viewport changes
   window.addEventListener('resize', () => {
     requestAnimationFrame(syncHeights);
   });
 
-  // Initial sync
   requestAnimationFrame(syncHeights);
 })();
 </script>
