@@ -18,9 +18,9 @@
       --border:     #d8dde8;
 
       /* Edinburgh Innovations column accent colours */
-      --uni-accent:   #003865;   /* EI deep navy / dark blue  */
-      --joint-accent: #7B0C2A;   /* EI dark red               */
-      --co-accent:    #5a6478;   /* mid-grey                  */
+      --uni-accent:   #003865;
+      --joint-accent: #7B0C2A;
+      --co-accent:    #5a6478;
 
       --yes-bg:   #e6f4ed; --yes-text:   #1a6b3a; --yes-border: #a3d4b5;
       --no-bg:    #fce9e9; --no-text:    #a01a1a; --no-border:  #f0aaa8;
@@ -45,21 +45,42 @@
       padding: 28px 40px 24px;
       border-bottom: 4px solid var(--gold);
     }
+
+    .site-header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 28px;
+    }
+
+    .site-header-text {
+      min-width: 0;
+    }
+
+    .site-logo {
+      width: 180px;
+      max-width: 28vw;
+      height: auto;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+
     .site-header h1 {
       font-size: 1.45rem;
       font-weight: 600;
       letter-spacing: 0.01em;
     }
-    /* Change 1: full-width, no wrap */
+
     .site-header p {
       margin-top: 6px;
       font-size: 0.88rem;
       opacity: 0.75;
       line-height: 1.5;
-      white-space: nowrap;       /* prevent wrap */
+      white-space: nowrap;
       overflow: visible;
       max-width: none;
     }
+
     .draft-tag {
       display: inline-block;
       background: var(--gold);
@@ -75,12 +96,12 @@
     }
 
     /* ── SCENARIO SELECTOR ──────────────────────────────── */
-    /* Change 2: richer tabs */
     .selector-wrap {
       background: var(--card);
       border-bottom: 1px solid var(--border);
       padding: 20px 40px 0;
     }
+
     .selector-label {
       font-size: 0.75rem;
       font-weight: 700;
@@ -89,11 +110,13 @@
       color: var(--text-muted);
       margin-bottom: 16px;
     }
+
     .scenario-tabs {
       display: flex;
       gap: 6px;
       position: relative;
     }
+
     .scenario-tab {
       flex: 1;
       display: flex;
@@ -111,43 +134,52 @@
       font-family: inherit;
       position: relative;
     }
+
     .scenario-tab:hover {
       background: #e0e5ee;
       color: var(--navy);
       border-color: #b0bdd0;
     }
+
     .scenario-tab.active {
       background: var(--card);
       color: var(--navy);
       border-color: var(--gold);
-      border-bottom: 2px solid var(--card);  /* merges into content */
+      border-bottom: 2px solid var(--card);
       margin-bottom: -2px;
       z-index: 1;
       box-shadow: 0 -3px 0 var(--gold) inset;
     }
 
     .tab-letter {
-      width: 40px; height: 40px;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.1rem; font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      font-weight: 700;
       background: #d8dde8;
       border: 2px solid transparent;
       transition: all 0.2s;
       color: var(--text-muted);
     }
+
     .scenario-tab.active .tab-letter {
       background: var(--navy);
       color: #fff;
       border-color: var(--navy);
       box-shadow: 0 2px 8px rgba(22,45,78,.35);
     }
+
     .tab-pct {
       font-size: 0.82rem;
       font-weight: 700;
       color: var(--text-muted);
       transition: color 0.2s;
     }
+
     .scenario-tab.active .tab-pct { color: var(--gold); }
 
     .tab-name {
@@ -157,7 +189,11 @@
       line-height: 1.3;
       font-weight: 500;
     }
-    .scenario-tab.active .tab-name { font-weight: 600; color: var(--navy); }
+
+    .scenario-tab.active .tab-name {
+      font-weight: 600;
+      color: var(--navy);
+    }
 
     /* ── MAIN CONTENT ───────────────────────────────────── */
     .main {
@@ -177,13 +213,33 @@
       align-items: center;
       gap: 20px;
     }
-    .summary-scenario { font-size: 2rem; font-weight: 700; color: var(--navy); line-height: 1; }
-    .summary-divider { width: 1px; height: 40px; background: var(--border); }
-    .summary-title { font-weight: 600; font-size: 1rem; color: var(--navy); }
-    .summary-sub { font-size: 0.85rem; color: var(--text-muted); margin-top: 2px; }
+
+    .summary-scenario {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1;
+    }
+
+    .summary-divider {
+      width: 1px;
+      height: 40px;
+      background: var(--border);
+    }
+
+    .summary-title {
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--navy);
+    }
+
+    .summary-sub {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
 
     /* ── LEGEND / KEY ───────────────────────────────────── */
-    /* Change 3: renamed KEY, green/yellow/red, 3 badges only */
     .legend {
       display: flex;
       gap: 10px;
@@ -195,6 +251,7 @@
       border-radius: 6px;
       align-items: center;
     }
+
     .legend-label {
       font-size: 0.72rem;
       font-weight: 700;
@@ -204,27 +261,30 @@
       margin-right: 6px;
     }
 
-    /* Override badge colours for the three key statuses */
     .badge.yes {
       background: #d4edda;
       color: #155724;
       border-color: #72c08a;
     }
+
     .badge.no {
       background: #f8d7da;
       color: #721c24;
       border-color: #e0949a;
     }
+
     .badge.option {
       background: #fff3cd;
       color: #856404;
       border-color: #ddb84a;
     }
+
     .badge.conditional {
       background: var(--cond-bg);
       color: var(--cond-text);
       border-color: var(--cond-border);
     }
+
     .badge.draft {
       background: var(--draft-bg);
       color: var(--draft-text);
@@ -246,7 +306,6 @@
       box-shadow: 0 1px 4px rgba(0,0,0,.06);
     }
 
-    /* Change 4: EI brand colours for card headers */
     .card-header {
       padding: 14px 18px;
       font-size: 0.82rem;
@@ -258,15 +317,16 @@
       align-items: center;
       gap: 8px;
     }
-    .card-header-icon { font-size: 1rem; }
-    .ip-card.uni   .card-header { background: var(--uni-accent); }
-    .ip-card.joint .card-header { background: var(--joint-accent); }
-    .ip-card.co    .card-header { background: var(--co-accent); }
 
-    /* Coloured left-border accent to reinforce card identity */
-    .ip-card.uni   { border-top: 3px solid var(--uni-accent); }
+    .card-header-icon { font-size: 1rem; }
+
+    .ip-card.uni .card-header { background: var(--uni-accent); }
+    .ip-card.joint .card-header { background: var(--joint-accent); }
+    .ip-card.co .card-header { background: var(--co-accent); }
+
+    .ip-card.uni { border-top: 3px solid var(--uni-accent); }
     .ip-card.joint { border-top: 3px solid var(--joint-accent); }
-    .ip-card.co    { border-top: 3px solid var(--co-accent); }
+    .ip-card.co { border-top: 3px solid var(--co-accent); }
 
     .ownership-row {
       display: flex;
@@ -277,8 +337,20 @@
       border-bottom: 1px solid var(--border);
       font-size: 0.84rem;
     }
-    .ownership-label { color: var(--text-muted); font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; min-width: 72px; }
-    .ownership-value { font-weight: 600; color: var(--navy); }
+
+    .ownership-label {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      min-width: 72px;
+    }
+
+    .ownership-value {
+      font-weight: 600;
+      color: var(--navy);
+    }
 
     /* ── PERSPECTIVE HEADER ROWS ─────────────────────────── */
     .rights-perspective {
@@ -290,16 +362,25 @@
       color: #fff;
       margin-top: 0;
     }
-    .ip-card.uni   .rights-perspective { background: color-mix(in srgb, var(--uni-accent)   60%, #000 40%); }
-    .ip-card.joint .rights-perspective { background: color-mix(in srgb, var(--joint-accent) 60%, #000 40%); }
-    .ip-card.co    .rights-perspective { background: color-mix(in srgb, var(--co-accent)    60%, #000 40%); }
+
+    .ip-card.uni .rights-perspective {
+      background: color-mix(in srgb, var(--uni-accent) 60%, #000 40%);
+    }
+
+    .ip-card.joint .rights-perspective {
+      background: color-mix(in srgb, var(--joint-accent) 60%, #000 40%);
+    }
+
+    .ip-card.co .rights-perspective {
+      background: color-mix(in srgb, var(--co-accent) 60%, #000 40%);
+    }
 
     /* ── RIGHTS ROWS ────────────────────────────────────── */
-    /* Change 5: stronger visual hierarchy between heading and body */
     .rights-row {
       padding: 0;
       border-bottom: 1px solid #eef0f5;
     }
+
     .rights-row:last-child { border-bottom: none; }
 
     .rights-top {
@@ -312,6 +393,7 @@
       background: #f4f6fa;
       border-bottom: 1px solid #e4e8f0;
     }
+
     .rights-top:hover { background: #eceff6; }
 
     .rights-category {
@@ -355,6 +437,7 @@
       line-height: 1.65;
       white-space: pre-line;
     }
+
     .rights-detail.open { display: block; }
 
     .expand-btn {
@@ -368,7 +451,11 @@
       flex-shrink: 0;
       transition: all 0.15s;
     }
-    .expand-btn:hover { background: var(--bg); color: var(--navy); }
+
+    .expand-btn:hover {
+      background: var(--bg);
+      color: var(--navy);
+    }
 
     /* ── NOTES SECTION ──────────────────────────────────── */
     .notes-section {
@@ -378,6 +465,7 @@
       border-radius: 8px;
       overflow: hidden;
     }
+
     .notes-header {
       background: var(--navy);
       color: #fff;
@@ -386,18 +474,24 @@
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.07em;
-      display: flex; align-items: center; gap: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
+
     .notes-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 0;
     }
+
     .note-item {
       padding: 18px 20px;
       border-right: 1px solid var(--border);
     }
+
     .note-item:last-child { border-right: none; }
+
     .note-title {
       font-size: 0.78rem;
       font-weight: 700;
@@ -405,8 +499,11 @@
       text-transform: uppercase;
       letter-spacing: 0.06em;
       margin-bottom: 6px;
-      display: flex; align-items: center; gap: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
+
     .note-body {
       font-size: 0.82rem;
       line-height: 1.6;
@@ -433,10 +530,32 @@
       .site-header p { white-space: normal; }
       .selector-wrap { padding: 16px 20px 0; }
       .tab-name { display: none; }
+
+      .site-header-content {
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      .site-logo {
+        align-self: flex-end;
+        width: 150px;
+        max-width: 50vw;
+      }
     }
+
     @media (max-width: 600px) {
-      .scenario-summary { flex-direction: column; align-items: flex-start; gap: 8px; }
+      .scenario-summary {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+
       .summary-divider { display: none; }
+
+      .site-logo {
+        width: 130px;
+        max-width: 60vw;
+      }
     }
   </style>
 </head>
@@ -444,8 +563,14 @@
 
 <!-- HEADER -->
 <header class="site-header">
-  <h1>IP Terms in University–Industry Collaborations <span class="draft-tag">Draft v0.4</span></h1>
-  <p>Key IP provisions based on industry funding level. Select a scenario to view ownership and rights for each category of arising IP. Click any rights row for full detail.</p>
+  <div class="site-header-content">
+    <div class="site-header-text">
+      <h1>IP Terms in University–Industry Collaborations <span class="draft-tag">Draft v0.4</span></h1>
+      <p>Key IP provisions based on industry funding level. Select a scenario to view ownership and rights for each category of arising IP. Click any rights row for full detail.</p>
+    </div>
+
+    <img src="EI_logo.png" alt="Edinburgh Innovations logo" class="site-logo">
+  </div>
 </header>
 
 <!-- SCENARIO SELECTOR -->
@@ -1183,8 +1308,7 @@
     // Align ownership rows
     setMinHeightToMax(cards.map(card => card.querySelector('.ownership-row')));
 
-    // Align perspective sub-headings:
-    // e.g. "Industry partner's rights over..." and "University's rights over..."
+    // Align perspective sub-headings
     const perspectiveGroups = cards.map(card => [
       ...card.querySelectorAll('.rights-perspective')
     ]);
@@ -1197,8 +1321,7 @@
       setMinHeightToMax(perspectiveGroups.map(group => group[i]));
     }
 
-    // Align each rights row by index:
-    // Internal R&D rows align, Commercial use rows align, etc.
+    // Align each rights row by index
     const rowGroups = cards.map(card => [
       ...card.querySelectorAll('.rights-row')
     ]);
@@ -1212,7 +1335,7 @@
     }
   }
 
-  // Wrap your existing render function so heights are synced after every scenario change
+  // Wrap existing render function so heights are synced after every scenario change
   if (typeof window.render === 'function') {
     const originalRender = window.render;
 
@@ -1223,7 +1346,7 @@
     };
   }
 
-  // Wrap your existing toggleDetail function so heights are synced after expanding/collapsing rows
+  // Wrap existing toggleDetail function so heights are synced after expanding/collapsing rows
   if (typeof window.toggleDetail === 'function') {
     const originalToggleDetail = window.toggleDetail;
 
