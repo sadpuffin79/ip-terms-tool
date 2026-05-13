@@ -1134,5 +1134,115 @@
   // Initial render
   render('A');
 </script>
+
+<script>
+(function () {
+  function setMinHeightToMax(elements) {
+    const els = elements.filter(Boolean);
+    if (els.length < 2) return;
+
+    let max = 0;
+
+    els.forEach(el => {
+      max = Math.max(max, el.getBoundingClientRect().height);
+    });
+
+    max = Math.ceil(max);
+
+    els.forEach(el => {
+      el.style.minHeight = `${max}px`;
+    });
+  }
+
+  function syncHeights() {
+    const cards = [...document.querySelectorAll('#ipGrid .ip-card')];
+    if (cards.length < 2) return;
+
+    // Reset previous height syncing
+    const resetSelectors = [
+      '.card-header',
+      '.ownership-row',
+      '.rights-perspective',
+      '.rights-row'
+    ];
+
+    cards.forEach(card => {
+      resetSelectors.forEach(selector => {
+        card.querySelectorAll(selector).forEach(el => {
+          el.style.minHeight = '';
+        });
+      });
+    });
+
+    // Do not sync heights on single-column/mobile layout
+    if (window.matchMedia('(max-width: 900px)').matches) return;
+
+    // Align card headers
+    setMinHeightToMax(cards.map(card => card.querySelector('.card-header')));
+
+    // Align ownership rows
+    setMinHeightToMax(cards.map(card => card.querySelector('.ownership-row')));
+
+    // Align perspective sub-headings:
+    // e.g. "Industry partner's rights over..." and "University's rights over..."
+    const perspectiveGroups = cards.map(card => [
+      ...card.querySelectorAll('.rights-perspective')
+    ]);
+
+    const maxPerspectiveCount = Math.max(
+      ...perspectiveGroups.map(group => group.length)
+    );
+
+    for (let i = 0; i < maxPerspectiveCount; i++) {
+      setMinHeightToMax(perspectiveGroups.map(group => group[i]));
+    }
+
+    // Align each rights row by index:
+    // Internal R&D rows align, Commercial use rows align, etc.
+    const rowGroups = cards.map(card => [
+      ...card.querySelectorAll('.rights-row')
+    ]);
+
+    const maxRowCount = Math.max(
+      ...rowGroups.map(group => group.length)
+    );
+
+    for (let i = 0; i < maxRowCount; i++) {
+      setMinHeightToMax(rowGroups.map(group => group[i]));
+    }
+  }
+
+  // Wrap your existing render function so heights are synced after every scenario change
+  if (typeof window.render === 'function') {
+    const originalRender = window.render;
+
+    window.render = function (...args) {
+      const result = originalRender.apply(this, args);
+      requestAnimationFrame(syncHeights);
+      return result;
+    };
+  }
+
+  // Wrap your existing toggleDetail function so heights are synced after expanding/collapsing rows
+  if (typeof window.toggleDetail === 'function') {
+    const originalToggleDetail = window.toggleDetail;
+
+    window.toggleDetail = function (...args) {
+      const result = originalToggleDetail.apply(this, args);
+      requestAnimationFrame(syncHeights);
+      return result;
+    };
+  }
+
+  // Re-sync when the viewport changes
+  window.addEventListener('resize', () => {
+    requestAnimationFrame(syncHeights);
+  });
+
+  // Initial sync
+  requestAnimationFrame(syncHeights);
+})();
+</script>
+
 </body>
 </html>
